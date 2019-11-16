@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // int型のスライスをnで埋める
 func fillSlice(s []int, n int) {
@@ -34,6 +37,13 @@ func abs(x int) int {
 		return -x
 	}
 	return x
+}
+
+// ユークリッド距離
+func dist(x1, y1, x2, y2 int) float64 {
+	dx := float64(x1 - x2)
+	dy := float64(y1 - y2)
+	return math.Sqrt(dx*dx + dy*dy)
 }
 
 // x^y
