@@ -1,0 +1,89 @@
+package main
+
+import "fmt"
+
+// int型のスライスをnで埋める
+func fillSlice(s []int, n int) {
+	for i := range s {
+		s[i] = n
+	}
+}
+
+func max(nums ...int) int {
+	ret := nums[0]
+	for _, v := range nums {
+		if v > ret {
+			ret = v
+		}
+	}
+	return ret
+}
+
+func min(nums ...int) int {
+	ret := nums[0]
+	for _, v := range nums {
+		if v < ret {
+			ret = v
+		}
+	}
+	return ret
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+// x^y
+func pow(x, y int) int {
+	ret := 1
+	for i := 0; i < y; i++ {
+		ret *= x
+	}
+	return ret
+}
+
+func sum(a []int) int {
+	ret := 0
+	for _, v := range a {
+		ret += v
+	}
+	return ret
+}
+
+// 最大公約数
+func gcd(a, b int) int {
+	if b == 0 {
+		return a
+	}
+	for a%b != 0 {
+		a, b = b, a%b
+	}
+	return b
+}
+
+// 最小公倍数
+func lcm(a, b int) int {
+	return a / gcd(a, b) * b
+}
+
+func main() {
+	a, b, c := 5, 3, 7
+	fmt.Println(max(a, b, c))
+	fmt.Println(min(a, b, c))
+
+	d, e := -1, 5
+	fmt.Println(abs(d), abs(e))
+	fmt.Println(pow(d, e))
+
+	x, y := 12, 30
+	fmt.Println(gcd(x, y))
+	fmt.Println(lcm(x, y))
+
+	s := make([]int, 5)
+	fmt.Println(s)
+	fillSlice(s, -1)
+	fmt.Println(s)
+}
