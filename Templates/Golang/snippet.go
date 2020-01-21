@@ -46,11 +46,15 @@ func dist(x1, y1, x2, y2 int) float64 {
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
-// x^y
-func pow(x, y int) int {
+// a^n
+func pow(a, n int) int {
 	ret := 1
-	for i := 0; i < y; i++ {
-		ret *= x
+	for n > 0 {
+		if n&1 == 1 {
+			ret *= a
+		}
+		a *= a
+		n >>= 1
 	}
 	return ret
 }
