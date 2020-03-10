@@ -7,10 +7,14 @@ import (
 	"strconv"
 )
 
+const (
+	initialBufSize = 100000
+	maxBufSize     = 10000000
+)
+
 var (
-	sc  = bufio.NewScanner(os.Stdin)
-	rdr = bufio.NewReaderSize(os.Stdin, 1000000)
-	wt  = bufio.NewWriter(os.Stdout)
+	sc = bufio.NewScanner(os.Stdin)
+	wt = bufio.NewWriter(os.Stdout)
 )
 
 func next() string {
@@ -44,18 +48,6 @@ func nextFloat64s(n int) []float64 {
 	return slice
 }
 
-func nextMega() string {
-	buf := make([]byte, 0, 1000000)
-	for {
-		l, p, _ := rdr.ReadLine()
-		buf = append(buf, l...)
-		if !p {
-			break
-		}
-	}
-	return string(buf)
-}
-
 func putf(format string, a ...interface{}) {
 	fmt.Fprintf(wt, format, a...)
 }
@@ -66,7 +58,9 @@ func puts(a ...interface{}) {
 
 func main() {
 	sc.Split(bufio.ScanWords)
+	sc.Buffer(make([]byte, initialBufSize), maxBufSize)
+	defer wt.Flush()
+
 	x := nextInt()
 	puts(x)
-	wt.Flush()
 }
