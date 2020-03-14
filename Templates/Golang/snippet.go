@@ -83,6 +83,11 @@ func lcm(a, b int) int {
 	return a / gcd(a, b) * b
 }
 
+// 切り上げ整数除算
+func divFloor(a, b int) int {
+	return (a + (b - 1)) / b
+}
+
 func main() {
 	a, b, c := 5, 3, 7
 	fmt.Println(max(a, b, c))
