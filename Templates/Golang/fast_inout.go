@@ -27,6 +27,18 @@ func nextInt() int {
 	return i
 }
 
+func nextInt2() (int, int) {
+	return nextInt(), nextInt()
+}
+
+func nextInt3() (int, int, int) {
+	return nextInt(), nextInt(), nextInt()
+}
+
+func nextInt4() (int, int, int, int) {
+	return nextInt(), nextInt(), nextInt(), nextInt()
+}
+
 func nextFloat64() float64 {
 	f, _ := strconv.ParseFloat(next(), 64)
 	return f

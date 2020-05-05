@@ -59,7 +59,7 @@ func pow(a, n int) int {
 	return ret
 }
 
-func sum(a []int) int {
+func sum(a ...int) int {
 	ret := 0
 	for _, v := range a {
 		ret += v
