@@ -110,10 +110,9 @@ func NewDijkstra(n int) *Dijkstra {
 	return d
 }
 
-// aとbを結ぶ重み付きの辺を追加
-func (d *Dijkstra) AddEdge(a, b, cost int) {
-	d.Edges[a] = append(d.Edges[a], Edge{b, cost})
-	d.Edges[b] = append(d.Edges[b], Edge{a, cost})
+// fromからtoへの重み付きの辺を追加
+func (d *Dijkstra) AddEdge(from, to, cost int) {
+	d.Edges[from] = append(d.Edges[from], Edge{to, cost})
 }
 
 // 0-indexed
@@ -178,6 +177,7 @@ func main() {
 	for i := 0; i < n-1; i++ {
 		a, b, c := nextInt()-1, nextInt()-1, nextInt()
 		d.AddEdge(a, b, c)
+		d.AddEdge(b, a, c)
 	}
 
 	q, k := nextInt(), nextInt()-1
