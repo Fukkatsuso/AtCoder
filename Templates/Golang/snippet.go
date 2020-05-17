@@ -88,6 +88,20 @@ func divFloor(a, b int) int {
 	return (a + (b - 1)) / b
 }
 
+// p1,p2がつくる線分と，p3,p4がつくる線分が交差するか判定
+type Point struct {
+	x, y int
+}
+
+func crossed(p1, p2, p3, p4 Point) bool {
+	ta := (p1.x-p2.x)*(p3.y-p1.y) + (p1.y-p2.y)*(p1.x-p3.x)
+	tb := (p1.x-p2.x)*(p4.y-p1.y) + (p1.y-p2.y)*(p1.x-p4.x)
+	tc := (p3.x-p4.x)*(p1.y-p3.y) + (p3.y-p4.y)*(p3.x-p1.x)
+	td := (p3.x-p4.x)*(p2.y-p3.y) + (p3.y-p4.y)*(p3.x-p2.x)
+
+	return ta*tb < 0 && tc*td < 0
+}
+
 func main() {
 	a, b, c := 5, 3, 7
 	fmt.Println(max(a, b, c))
