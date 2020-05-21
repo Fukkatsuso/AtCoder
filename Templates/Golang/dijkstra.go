@@ -14,8 +14,9 @@ const (
 )
 
 var (
-	sc = bufio.NewScanner(os.Stdin)
-	wt = bufio.NewWriter(os.Stdout)
+	sc  = bufio.NewScanner(os.Stdin)
+	wt  = bufio.NewWriter(os.Stdout)
+	mod = 1000000007
 )
 
 func next() string {
@@ -32,9 +33,72 @@ func puts(a ...interface{}) {
 	fmt.Fprintln(wt, a...)
 }
 
-// 辺
+// example: ABC070D
+func main() {
+	sc.Split(bufio.ScanWords)
+	sc.Buffer(make([]byte, initialBufSize), maxBufSize)
+	defer wt.Flush()
+
+	n := nextInt()
+	g := NewGraph(n)
+	for i := 0; i < n-1; i++ {
+		a, b, c := nextInt()-1, nextInt()-1, nextInt()
+		g.AddEdge(a, b, c)
+		g.AddEdge(b, a, c)
+	}
+
+	q, k := nextInt(), nextInt()-1
+	g.DijkstraSearch(k)
+
+	for i := 0; i < q; i++ {
+		x, y := nextInt()-1, nextInt()-1
+		puts(g.Cost[x] + g.Cost[y])
+	}
+}
+
 type Edge struct {
 	to, cost int
+}
+
+// 辺のリストで表現されるグラフ
+type Graph struct {
+	Edges    [][]Edge // Edge[i][j]: 頂点iのj番目の辺
+	Pred     []int    // 遷移元
+	Cost     []int    // 始点からの最小コスト
+	RouteNum []int    // 始点から各頂点への最短経路数
+}
+
+// 頂点数nのリスト型グラフを返す
+func NewGraph(n int) *Graph {
+	g := Graph{
+		Edges:    make([][]Edge, n),
+		Pred:     make([]int, n),
+		Cost:     make([]int, n),
+		RouteNum: make([]int, n),
+	}
+	for i := 0; i < n; i++ {
+		g.Edges[i] = make([]Edge, 0)
+		g.Pred[i] = -1
+		g.Cost[i] = 1 << 60
+		g.RouteNum[i] = 0
+	}
+	return &g
+}
+
+// 辺の追加
+func (g *Graph) AddEdge(from, to, cost int) {
+	g.Edges[from] = append(g.Edges[from], Edge{to, cost})
+}
+
+// 辺の削除(成功:true, 失敗:false)
+func (g *Graph) DeleteEdge(from, to int) bool {
+	for i := range g.Edges[from] {
+		if g.Edges[from][i].to == to {
+			g.Edges[from] = append(g.Edges[from][:i], g.Edges[from][i+1:]...)
+			return true
+		}
+	}
+	return false
 }
 
 // value: 頂点の番号
@@ -77,48 +141,12 @@ func (pq *PriorityQueue) Pop() interface{} {
 	return elem
 }
 
-func newSlice(n, x int) []int {
-	slice := make([]int, n)
-	for i := range slice {
-		slice[i] = x
-	}
-	return slice
-}
-
-type Dijkstra struct {
-	NodeNum int      // 頂点数
-	Origin  int      // 始点
-	InfCost int      // 無限大とみなすコストの値
-	Pred    []int    // 遷移元
-	Cost    []int    // 始点からの最小コスト
-	Edges   [][]Edge // 頂点の隣接リスト
-}
-
-func NewDijkstra(n int) *Dijkstra {
-	edges := make([][]Edge, n)
-	for i := range edges {
-		edges[i] = make([]Edge, 0)
-	}
-	inf := 1 << 60
-	d := &Dijkstra{
-		NodeNum: n,
-		InfCost: inf,
-		Pred:    newSlice(n, -1),
-		Cost:    newSlice(n, inf),
-		Edges:   edges,
-	}
-	return d
-}
-
-// fromからtoへの重み付きの辺を追加
-func (d *Dijkstra) AddEdge(from, to, cost int) {
-	d.Edges[from] = append(d.Edges[from], Edge{to, cost})
-}
-
 // 0-indexed
-func (d *Dijkstra) Search(origin int) {
+func (g *Graph) DijkstraSearch(origin int) {
 	// init
-	done := make([]bool, d.NodeNum)
+	g.Cost[origin] = 0
+	g.RouteNum[origin] = 1
+	done := make([]bool, len(g.Edges))
 	pq := make(PriorityQueue, 0)
 	heap.Init(&pq)
 	heap.Push(&pq, &Elem{
@@ -126,35 +154,40 @@ func (d *Dijkstra) Search(origin int) {
 		priority: 0,
 	})
 
+	// seaech
 	for pq.Len() > 0 {
 		v := heap.Pop(&pq).(*Elem)
-		now := v.value.(int)
-		done[now] = true
-		for _, edge := range d.Edges[now] {
-			if done[edge.to] {
+		from := v.value.(int)
+		done[from] = true
+		for _, edge := range g.Edges[from] {
+			to := edge.to
+			if done[to] {
 				continue
 			}
 			// 隣接頂点の最小コストを更新
 			nextCost := v.priority + edge.cost
-			if nextCost < d.Cost[edge.to] {
-				d.Cost[edge.to] = nextCost
-				d.Pred[edge.to] = now
+			if nextCost < g.Cost[to] {
+				g.Cost[to] = nextCost
+				g.Pred[to] = from
+				g.RouteNum[to] = g.RouteNum[from]
 				heap.Push(&pq, &Elem{
-					value:    edge.to,
+					value:    to,
 					priority: nextCost,
 				})
+			} else if nextCost == g.Cost[to] {
+				g.RouteNum[to] = (g.RouteNum[to] + g.RouteNum[from]) % mod
 			}
 		}
 	}
 }
 
-// toへ向かうパスを返す
-func (d *Dijkstra) MinPath(to int) []int {
+// toへ向かう最短パスを返す
+func (g *Graph) MinPath(to int) []int {
 	path := make([]int, 0)
 	// 終点から探索
 	path = append(path, to)
-	for node := to; d.Pred[node] < d.InfCost && d.Pred[node] != -1; {
-		node = d.Pred[node]
+	for node := to; g.Pred[node] != -1; {
+		node = g.Pred[node]
 		path = append(path)
 	}
 	// 配列を反転
@@ -162,29 +195,4 @@ func (d *Dijkstra) MinPath(to int) []int {
 		path[i], path[n-1-i] = path[n-1-i], path[i]
 	}
 	return path
-}
-
-// sample
-// ABC070D
-func main() {
-	sc.Split(bufio.ScanWords)
-	sc.Buffer(make([]byte, initialBufSize), maxBufSize)
-	defer wt.Flush()
-
-	n := nextInt()
-
-	d := NewDijkstra(n)
-	for i := 0; i < n-1; i++ {
-		a, b, c := nextInt()-1, nextInt()-1, nextInt()
-		d.AddEdge(a, b, c)
-		d.AddEdge(b, a, c)
-	}
-
-	q, k := nextInt(), nextInt()-1
-	// 始点kから探索
-	d.Search(k)
-	for i := 0; i < q; i++ {
-		x, y := nextInt()-1, nextInt()-1
-		puts(d.Cost[x] + d.Cost[y])
-	}
 }
