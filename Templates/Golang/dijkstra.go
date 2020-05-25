@@ -70,7 +70,7 @@ type Graph struct {
 
 // 頂点数nのリスト型グラフを返す
 func NewGraph(n int) *Graph {
-	g := Graph{
+	g := &Graph{
 		Edges:    make([][]Edge, n),
 		Pred:     make([]int, n),
 		Cost:     make([]int, n),
@@ -82,7 +82,7 @@ func NewGraph(n int) *Graph {
 		g.Cost[i] = 1 << 60
 		g.RouteNum[i] = 0
 	}
-	return &g
+	return g
 }
 
 // 辺の追加

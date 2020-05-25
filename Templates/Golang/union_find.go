@@ -1,44 +1,50 @@
 package main
 
 type UnionFind struct {
-	par  []int
-	rank []int
+	Par  []int
+	Rank []int
 }
 
-func (uf UnionFind) Init(n int) {
+func NewUnionFind(n int) *UnionFind {
+	uf := &UnionFind{
+		Par:  make([]int, n),
+		Rank: make([]int, n),
+	}
+	uf.Init(n)
+	return uf
+}
+
+func (uf *UnionFind) Init(n int) {
 	for i := 0; i < n; i++ {
-		uf.par[i] = i
-		uf.rank[i] = 0
+		uf.Par[i] = i
+		uf.Rank[i] = 0
 	}
 }
 
-func (uf UnionFind) Find(x int) int {
-	for uf.par[x] != x {
-		x, uf.par[x] = uf.par[x], uf.par[uf.par[x]]
+func (uf *UnionFind) Find(x int) int {
+	for uf.Par[x] != x {
+		x, uf.Par[x] = uf.Par[x], uf.Par[uf.Par[x]]
 	}
 	return x
 }
 
-func (uf UnionFind) Unite(x, y int) {
+func (uf *UnionFind) Unite(x, y int) {
 	x = uf.Find(x)
 	y = uf.Find(y)
 	if x == y {
 		return
 	}
 
-	if uf.rank[x] < uf.rank[y] {
-		uf.par[x] = y
+	if uf.Rank[x] < uf.Rank[y] {
+		uf.Par[x] = y
 	} else {
-		uf.par[y] = x
-		if uf.rank[x] == uf.rank[y] {
-			uf.rank[x]++
+		uf.Par[y] = x
+		if uf.Rank[x] == uf.Rank[y] {
+			uf.Rank[x]++
 		}
 	}
 }
 
-func (uf UnionFind) Same(x, y int) bool {
+func (uf *UnionFind) Same(x, y int) bool {
 	return uf.Find(x) == uf.Find(y)
 }
-
-// uf := UnionFind{make([]int, 3*n), make([]int, 3*n)}
-// uf.Init();
