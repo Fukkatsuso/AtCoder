@@ -19,6 +19,7 @@ func binarySearch(a []int, key int) int {
 	return -1
 }
 
+// key以上の要素の最小インデックス
 func lowerBound(a []int, key int) int {
 	l, r := 0, len(a)-1
 	for l <= r {
@@ -32,6 +33,7 @@ func lowerBound(a []int, key int) int {
 	return l
 }
 
+// keyより大きい要素の最小インデックス
 func upperBound(a []int, key int) int {
 	l, r := 0, len(a)-1
 	for l <= r {
