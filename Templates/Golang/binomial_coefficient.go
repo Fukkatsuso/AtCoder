@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-const COMMAX int64 = 1000000
-const MOD int64 = 1000000007
+const COMMAX int = 1000000
+const MOD int = 1000000007
 
-var fac [COMMAX]int64
-var finv [COMMAX]int64
-var inv [COMMAX]int64
+var fac [COMMAX]int
+var finv [COMMAX]int
+var inv [COMMAX]int
 
 // テーブル作成
 func COMinit() {
@@ -18,7 +18,7 @@ func COMinit() {
 	finv[0] = 1
 	finv[1] = 1
 	inv[1] = 1
-	for i := int64(2); i < COMMAX; i++ {
+	for i := 2; i < COMMAX; i++ {
 		fac[i] = fac[i-1] * i % MOD
 		inv[i] = MOD - inv[MOD%i]*(MOD/i)%MOD
 		finv[i] = finv[i-1] * inv[i] % MOD
@@ -26,7 +26,7 @@ func COMinit() {
 }
 
 // 二項係数nCk
-func COM(n, k int64) int64 {
+func COM(n, k int) int {
 	if n < k {
 		return 0
 	}
@@ -37,7 +37,7 @@ func COM(n, k int64) int64 {
 }
 
 func main() {
-	var n, k int64
+	var n, k int
 	fmt.Scan(&n, &k)
 
 	COMinit()
