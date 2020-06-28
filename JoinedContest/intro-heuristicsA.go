@@ -1,5 +1,3 @@
-// 0点
-
 package main
 
 import (
@@ -62,7 +60,7 @@ func main() {
 			last[j] = i
 			diff := s[i-1][j]
 			for k := range c {
-				diff += c[k] * (i - last[k])
+				diff -= c[k] * (i - last[k])
 			}
 			if diff > add {
 				t = j
