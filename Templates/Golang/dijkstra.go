@@ -188,7 +188,7 @@ func (g *Graph) MinPath(to int) []int {
 	path = append(path, to)
 	for node := to; g.Pred[node] != -1; {
 		node = g.Pred[node]
-		path = append(path)
+		path = append(path, node)
 	}
 	// 配列を反転
 	for i, n := 0, len(path); i < n/2; i++ {
