@@ -12,7 +12,7 @@ var finv [COMMAX]int
 var inv [COMMAX]int
 
 // テーブル作成
-func COMinit() {
+func init() {
 	fac[0] = 1
 	fac[1] = 1
 	finv[0] = 1
@@ -40,7 +40,6 @@ func main() {
 	var n, k int
 	fmt.Scan(&n, &k)
 
-	COMinit()
 	com := COM(n, k)
 
 	fmt.Println(com)
