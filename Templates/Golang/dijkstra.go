@@ -19,13 +19,13 @@ var (
 	mod = 1000000007
 )
 
-func next() string {
+func gets() string {
 	sc.Scan()
 	return sc.Text()
 }
 
-func nextInt() int {
-	i, _ := strconv.Atoi(next())
+func getInt() int {
+	i, _ := strconv.Atoi(gets())
 	return i
 }
 
@@ -39,19 +39,19 @@ func main() {
 	sc.Buffer(make([]byte, initialBufSize), maxBufSize)
 	defer wt.Flush()
 
-	n := nextInt()
+	n := getInt()
 	g := NewGraph(n)
 	for i := 0; i < n-1; i++ {
-		a, b, c := nextInt()-1, nextInt()-1, nextInt()
+		a, b, c := getInt()-1, getInt()-1, getInt()
 		g.AddEdge(a, b, c)
 		g.AddEdge(b, a, c)
 	}
 
-	q, k := nextInt(), nextInt()-1
+	q, k := getInt(), getInt()-1
 	g.DijkstraSearch(k)
 
 	for i := 0; i < q; i++ {
-		x, y := nextInt()-1, nextInt()-1
+		x, y := getInt()-1, getInt()-1
 		puts(g.Cost[x] + g.Cost[y])
 	}
 }

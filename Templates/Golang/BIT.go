@@ -59,13 +59,13 @@ var (
 	wt = bufio.NewWriter(os.Stdout)
 )
 
-func next() string {
+func gets() string {
 	sc.Scan()
 	return sc.Text()
 }
 
-func nextInt() int {
-	i, _ := strconv.Atoi(next())
+func getInt() int {
+	i, _ := strconv.Atoi(gets())
 	return i
 }
 
@@ -103,10 +103,10 @@ func main() {
 	sc.Buffer(make([]byte, initialBufSize), maxBufSize)
 	defer wt.Flush()
 
-	n, d, a := nextInt(), nextInt(), nextInt()
+	n, d, a := getInt(), getInt(), getInt()
 	mons := make(Mons, n)
 	for i := 0; i < n; i++ {
-		x, h := nextInt(), nextInt()
+		x, h := getInt(), getInt()
 		mons[i] = Mon{x, h}
 	}
 	sort.Sort(mons)

@@ -17,45 +17,45 @@ var (
 	wt = bufio.NewWriter(os.Stdout)
 )
 
-func next() string {
+func gets() string {
 	sc.Scan()
 	return sc.Text()
 }
 
-func nextInt() int {
-	i, _ := strconv.Atoi(next())
+func getInt() int {
+	i, _ := strconv.Atoi(gets())
 	return i
 }
 
-func nextInt2() (int, int) {
-	return nextInt(), nextInt()
+func getInt2() (int, int) {
+	return getInt(), getInt()
 }
 
-func nextInt3() (int, int, int) {
-	return nextInt(), nextInt(), nextInt()
+func getInt3() (int, int, int) {
+	return getInt(), getInt(), getInt()
 }
 
-func nextInt4() (int, int, int, int) {
-	return nextInt(), nextInt(), nextInt(), nextInt()
+func getInt4() (int, int, int, int) {
+	return getInt(), getInt(), getInt(), getInt()
 }
 
-func nextFloat64() float64 {
-	f, _ := strconv.ParseFloat(next(), 64)
+func getFloat64() float64 {
+	f, _ := strconv.ParseFloat(gets(), 64)
 	return f
 }
 
-func nextInts(n int) []int {
+func getInts(n int) []int {
 	slice := make([]int, n)
 	for i := 0; i < n; i++ {
-		slice[i] = nextInt()
+		slice[i] = getInt()
 	}
 	return slice
 }
 
-func nextFloat64s(n int) []float64 {
+func getFloat64s(n int) []float64 {
 	slice := make([]float64, n)
 	for i := 0; i < n; i++ {
-		slice[i] = nextFloat64()
+		slice[i] = getFloat64()
 	}
 	return slice
 }
@@ -73,6 +73,6 @@ func main() {
 	sc.Buffer(make([]byte, initialBufSize), maxBufSize)
 	defer wt.Flush()
 
-	x := nextInt()
+	x := getInt()
 	puts(x)
 }
