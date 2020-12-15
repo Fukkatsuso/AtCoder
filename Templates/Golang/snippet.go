@@ -84,7 +84,7 @@ func lcm(a, b int) int {
 }
 
 // 切り上げ整数除算
-func divFloor(a, b int) int {
+func divCeil(a, b int) int {
 	return (a + (b - 1)) / b
 }
 
