@@ -1,3 +1,5 @@
+// 解説AC
+
 package main
 
 import (
