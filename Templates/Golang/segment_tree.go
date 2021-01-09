@@ -48,7 +48,7 @@ func (seg *SegTree) Update(idx int, v SegType) {
 }
 
 // [l, r)
-func (seg *SegTree) Eval(l, r int) SegType {
+func (seg *SegTree) Query(l, r int) SegType {
 	vl, vr := seg.unity, seg.unity
 	for l, r = l+seg.size, r+seg.size; l < r; l, r = l>>1, r>>1 {
 		if l&1 > 0 {
@@ -78,9 +78,9 @@ func main() {
 	seg.Build()
 
 	// 区間[0,5)の和=10
-	fmt.Println(0, 5, seg.Eval(0, 5))
+	fmt.Println(0, 5, seg.Query(0, 5))
 
 	// [10,1,2,3,4,...]に更新, 和=20
 	seg.Update(0, 10)
-	fmt.Println(0, 5, seg.Eval(0, 5))
+	fmt.Println(0, 5, seg.Query(0, 5))
 }
