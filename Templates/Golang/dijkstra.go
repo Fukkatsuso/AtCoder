@@ -159,6 +159,9 @@ func (g *Graph) DijkstraSearch(origin int) {
 		v := heap.Pop(&pq).(*Elem)
 		from := v.value.(int)
 		done[from] = true
+		if g.Cost[from] < v.priority {
+			continue
+		}
 		for _, edge := range g.Edges[from] {
 			to := edge.to
 			if done[to] {
