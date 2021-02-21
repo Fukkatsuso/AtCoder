@@ -146,7 +146,6 @@ func (g *Graph) DijkstraSearch(origin int) {
 	// init
 	g.Cost[origin] = 0
 	g.RouteNum[origin] = 1
-	done := make([]bool, len(g.Edges))
 	pq := make(PriorityQueue, 0)
 	heap.Init(&pq)
 	heap.Push(&pq, &Elem{
@@ -158,15 +157,11 @@ func (g *Graph) DijkstraSearch(origin int) {
 	for pq.Len() > 0 {
 		v := heap.Pop(&pq).(*Elem)
 		from := v.value.(int)
-		done[from] = true
 		if g.Cost[from] < v.priority {
 			continue
 		}
 		for _, edge := range g.Edges[from] {
 			to := edge.to
-			if done[to] {
-				continue
-			}
 			// 隣接頂点の最小コストを更新
 			nextCost := v.priority + edge.cost
 			if nextCost < g.Cost[to] {
