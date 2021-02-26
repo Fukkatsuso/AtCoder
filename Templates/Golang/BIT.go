@@ -21,21 +21,21 @@ func NewBIT(n int) *BIT {
 
 // [l,r)にxを加算
 func (b *BIT) add(l, r, x int) {
-	add_sub := func(p, idx, x int) {
+	addSub := func(p, idx, x int) {
 		for idx < len(b[p]) {
 			b[p][idx] += x
 			idx += idx & (-idx)
 		}
 	}
-	add_sub(0, l, -x*(l-1))
-	add_sub(0, r, x*(r-1))
-	add_sub(1, l, x)
-	add_sub(1, r, -x)
+	addSub(0, l, -x*(l-1))
+	addSub(0, r, x*(r-1))
+	addSub(1, l, x)
+	addSub(1, r, -x)
 }
 
 // [l,r)の和
 func (b *BIT) sum(l, r int) int {
-	sum_sub := func(p, idx int) int {
+	sumSub := func(p, idx int) int {
 		s := 0
 		for idx > 0 {
 			s += b[p][idx]
@@ -43,7 +43,7 @@ func (b *BIT) sum(l, r int) int {
 		}
 		return s
 	}
-	return sum_sub(0, r-1) + sum_sub(1, r-1)*(r-1) - (sum_sub(0, l-1) + sum_sub(1, l-1)*(l-1))
+	return sumSub(0, r-1) + sumSub(1, r-1)*(r-1) - (sumSub(0, l-1) + sumSub(1, l-1)*(l-1))
 }
 
 //
